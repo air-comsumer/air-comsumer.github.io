@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="每一个Shader至少包含一个SubShader SubShader中包含最终渲染效果的代码，决定最终渲染效果 1. 渲染标签 决定什么时候渲染以及如何对物体进行渲染 2. 渲染状态 决定渲染时候的剔除方式、深度测试方式、混合方式等内容 3. 渲染通道 具体实现着色器代码的地方 123456789SubShader&#123;	Tags&#123;“标签名1”&#x3D;“标签值1”，“标签名2”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="已然遥远的理想乡">
+<meta property="og:url" content="http://example.com/2025/11/17/%E5%B7%B2%E7%84%B6%E9%81%A5%E8%BF%9C%E7%9A%84%E7%90%86%E6%83%B3%E4%B9%A1/index.html">
+<meta property="og:site_name" content="已然遥远的理想乡">
+<meta property="og:description" content="每一个Shader至少包含一个SubShader SubShader中包含最终渲染效果的代码，决定最终渲染效果 1. 渲染标签 决定什么时候渲染以及如何对物体进行渲染 2. 渲染状态 决定渲染时候的剔除方式、深度测试方式、混合方式等内容 3. 渲染通道 具体实现着色器代码的地方 123456789SubShader&#123;	Tags&#123;“标签名1”&#x3D;“标签值1”，“标签名2”">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-17T14:48:07.000Z">
+<meta property="article:modified_time" content="2025-11-21T00:29:27.751Z">
+<meta property="article:author" content="桂花糕">
+<meta property="article:tag" content="游戏开发">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2025/11/17/%E5%B7%B2%E7%84%B6%E9%81%A5%E8%BF%9C%E7%9A%84%E7%90%86%E6%83%B3%E4%B9%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>已然遥远的理想乡 | 已然遥远的理想乡</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已然遥远的理想乡</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/17/%E5%B7%B2%E7%84%B6%E9%81%A5%E8%BF%9C%E7%9A%84%E7%90%86%E6%83%B3%E4%B9%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/%E5%8D%83%E6%9D%9F.jpg">
+      <meta itemprop="name" content="桂花糕">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已然遥远的理想乡">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          已然遥远的理想乡
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-11-17 22:48:07" itemprop="dateCreated datePublished" datetime="2025-11-17T22:48:07+08:00">2025-11-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-21 08:29:27" itemprop="dateModified" datetime="2025-11-21T08:29:27+08:00">2025-11-21</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>每一个Shader至少包含一个SubShader
+SubShader中包含最终渲染效果的代码，决定最终渲染效果 1. 渲染标签
+决定什么时候渲染以及如何对物体进行渲染 2. 渲染状态
+决定渲染时候的剔除方式、深度测试方式、混合方式等内容 3. 渲染通道
+具体实现着色器代码的地方</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SubShader</span><br><span class="line">&#123;</span><br><span class="line">	Tags&#123;“标签名<span class="number">1</span>”=“标签值<span class="number">1</span>”，“标签名<span class="number">2</span>” = “标签值<span class="number">2</span>”&#125;</span><br><span class="line">	Pass</span><br><span class="line">	&#123;</span><br><span class="line">		第一个渲染通道</span><br><span class="line">	&#125;</span><br><span class="line">	每一个Pass都会让物体执行一次渲染</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="渲染标签">渲染标签</h1>
+<h2 id="语法结构">语法结构</h2>
+<p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tags&#123;“标签名<span class="number">1</span>”=“标签值<span class="number">1</span>”，“标签名<span class="number">2</span>” = “标签值<span class="number">2</span>”&#125;</span><br></pre></td></tr></table></figure> ## 渲染队列 &gt; [!INFO] &gt; 确定物体的渲染顺序
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"> 主要作用：</span><br><span class="line">确定物体的渲染顺序</span><br><span class="line"></span><br><span class="line">Tags&#123; <span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;标签值&quot;</span> &#125;</span><br><span class="line">常用Unity预先定义好的渲染队列标签值：</span><br><span class="line"></span><br><span class="line"><span class="number">1.B</span>ackground(背景)(队列号: <span class="number">1000</span>)</span><br><span class="line">  最早被渲染的物体的队列，一般用来渲染天空盒或者背景</span><br><span class="line">  Tags&#123; <span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Background&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>Geometry(几何)(队列号: <span class="number">2000</span>)</span><br><span class="line">  不透明的几何体通常使用该队列，当没有声明渲染队列时，Unity会默认使用这个队列</span><br><span class="line">  Tags&#123; <span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Geometry&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>AlphaTest(透明测试)(队列号: <span class="number">2450</span>)</span><br><span class="line">  有透明通道的，需要进行Alpha测试的几何体会使用该队列</span><br><span class="line">  当所有Geometry队列实体绘制完后再绘制AlphaTest队列，效率更高</span><br><span class="line">  Tags&#123; <span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;AlphaTest&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>Transparent(透明的)(队列号: <span class="number">3000</span>)</span><br><span class="line">  该队列中几何体按照由远到近的顺序进行绘制，半透明物体的渲染队列，所有进行透明混合的几何体都应该使用该队列</span><br><span class="line">  比如：玻璃材质，粒子特效等</span><br><span class="line">  Tags&#123; <span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Transparent&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span>Overlay(覆盖)(队列号: <span class="number">4000</span>)</span><br><span class="line">  用是放在最后渲染的队列，于叠加渲染的效果，比如镜头光晕等</span><br><span class="line">  Tags&#123; <span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Overlay&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">6.</span>自定义队列</span><br><span class="line">  基于Unity预先定义好的这些渲染队列标签来进行加减运算来定义自己的渲染队列</span><br><span class="line">  比如：</span><br><span class="line">  Tags&#123; <span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Geometry+1&quot;</span> &#125;</span><br><span class="line">代表的队列号就是 <span class="number">2001</span></span><br><span class="line">  Tags&#123; <span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Transparent-1&quot;</span> &#125;</span><br><span class="line">代表的队列号就是 <span class="number">2999</span></span><br><span class="line">  自定义队列在一些特殊情况下，特别有用</span><br><span class="line">  比如 一些水的渲染 想要在不透明物体之后，半透明物体之前进行渲染，就可以自定义</span><br><span class="line"></span><br><span class="line">  注意：自定义队列只能基于预先定义好的各类型进行计算，不能在Shader中直接赋值数字</span><br><span class="line">       如果实在想要直接赋值数字，可以在材质面板中进行设置</span><br></pre></td></tr></table></figure> ## 渲染类型</p>
+<blockquote>
+<p>[!INFO] &gt;主要作用 对着色器进行分类，之后可以用于着色器替换功能
+摄像机上有对应的API，可以指定这个渲染类型来替换成别的着色器</p>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Tags&#123; <span class="string">&quot;RenderType&quot;</span> = <span class="string">&quot;标签值&quot;</span> &#125;</span><br><span class="line">常用Unity预先定义好的渲染类型标签值：</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span>Opaque(不透明的)</span><br><span class="line">  用于普通Shader，比如：不透明、自发光、反射等</span><br><span class="line"><span class="number">2.</span>Transparent(透明的)</span><br><span class="line">  用于半透明Shader，比如：透明、粒子</span><br><span class="line"><span class="number">3.</span>TransparentCutout(透明切割)</span><br><span class="line">  用于透明测试Shader，比如：植物叶子</span><br><span class="line"><span class="number">4.B</span>ackground(背景)</span><br><span class="line">  用于天空盒Shader</span><br><span class="line"><span class="number">5.</span>Overlay(覆盖)</span><br><span class="line">  用于GUI纹理、Halo（光环）、Flare（光晕）</span><br><span class="line"></span><br><span class="line">了解即可</span><br><span class="line"><span class="number">6.</span>TreeOpaque</span><br><span class="line">  用于地形系统中的树干</span><br><span class="line"><span class="number">7.</span>TreeTransparentCutout</span><br><span class="line">  用于地形系统中的树叶</span><br><span class="line"><span class="number">8.</span>TreeBillboard</span><br><span class="line">  用于地形系统中的Billboarded树</span><br><span class="line"><span class="number">9.</span>Grass</span><br><span class="line">  用于地形系统中的草</span><br><span class="line"><span class="number">10.</span>GrassBillboard</span><br><span class="line">  用于地形系统中的Billboarded草</span><br></pre></td></tr></table></figure>
+<h2 id="禁用批处理">禁用批处理</h2>
+<pre><code>    主要作用：
+    当使用批处理时，模型会被变换到世界空间中，模型空间会被丢弃
+    这可能会导致某些使用模型空间顶点数据的Shader最终无法实现想要的结果
+    可以通过开启禁用批处理来解决该问题
+
+    总是禁用批处理
+    Tags&#123; &quot;DisableBatching&quot; = &quot;True&quot; &#125;
+
+    不禁用批处理（默认值）
+    Tags&#123; &quot;DisableBatching&quot; = &quot;False&quot; &#125;
+
+    了解即可
+    LOD效果激活时才会禁用批处理，主要用于地形系统上的树
+    Tags&#123; &quot;DisableBatching&quot; = &quot;LODFading&quot; &#125;</code></pre>
+<h2 id="禁用阴影投影">禁用阴影投影</h2>
+<pre><code>    主要作用：
+    控制该SubShader的物体是否会投射阴影
+
+    不投射阴影
+    Tags&#123; &quot;ForceNoShadowCasting&quot; = &quot;True&quot; &#125;
+    投射阴影（默认值）
+    Tags&#123; &quot;ForceNoShadowCasting&quot; = &quot;False&quot; &#125;</code></pre>
+<h2 id="忽略投影机">忽略投影机</h2>
+<pre><code>    主要作用：
+    物体是否受到Projector（投影机）的投射
+    Projector是Unity中的一个功能（以后讲解）
+
+    忽略Projector（一般半透明Shader需要开启该标签）
+    Tags&#123; &quot;IgnoreProjector&quot; = &quot;True&quot; &#125;
+
+    不忽略Projector（默认值）
+    Tags&#123; &quot;IgnoreProjector&quot; = &quot;False&quot; &#125;</code></pre>
+<h2 id="其他标签">其他标签</h2>
+<pre><code>    1.是否用于精灵
+    想要将该SubShader用于Sprite时，将该标签设置为False
+    Tags&#123; &quot;CanUseSpriteAtlas&quot; = &quot;False&quot; &#125;
+
+    2.预览类型
+    材质在预览窗口默认为球形，如果想要改变为平面或天空盒
+    只需要改变预览标签即可
+    平面
+    Tags&#123; &quot;PreviewType&quot; = &quot;Panel&quot; &#125;
+    天空盒
+    Tags&#123; &quot;PreviewType&quot; = &quot;SkyBox&quot; &#125;</code></pre>
+<blockquote>
+<p>[!WARNING] &gt; 以上这些标签只能在SubShader语句块中声明
+之后讲解的Pass渲染通道语句块中也可以声明渲染标签
+但是今天讲解的内容都不能在Pass中声明
+Pass中有自己专门的标签类型，我们会在之后讲解</p>
+</blockquote>
+<h1 id="渲染状态">渲染状态</h1>
+<h2 id="语法结构-1">语法结构</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">渲染状态 状态类型</span><br><span class="line">若有多个渲染状态，可以用空行隔开</span><br></pre></td></tr></table></figure>
+<h2 id="剔除方式">剔除方式</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   Cull Back     背面剔除</span><br><span class="line">Cull Front    正面剔除</span><br><span class="line">   Cull Off      不剔除</span><br><span class="line">   不设置的话，默认为背面剔除</span><br><span class="line"></span><br><span class="line">   一般情况下，我们需要两面渲染时，会设置为不剔除</span><br></pre></td></tr></table></figure>
+<h2 id="深度缓存">深度缓存</h2>
+<blockquote>
+<p>[!TIP] &gt; 保证互相遮挡的物体公共区域优先渲染挡在前面的片元</p>
+</blockquote>
+<p>![[Pasted image 20250209230433.png]]
+如果没有开启深度写入，则只要通过深度测试一定会被渲染
+每一个屏幕上的像素点都有一个内存区域记录深度信息 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">主要作用：</span><br><span class="line">是否写入深度缓冲</span><br><span class="line">深度缓冲（Depth Buffer）：</span><br><span class="line">深度缓冲是一个与屏幕像素对应的缓冲区，用于存储每个像素的深度值（距离相机的距离）。</span><br><span class="line">在渲染场景之前，深度缓冲被初始化为最大深度值，表示所有像素都在相机之外。</span><br><span class="line">最后留在深度缓冲中的信息会被渲染</span><br><span class="line">ZWrite On 写入深度缓冲</span><br><span class="line">ZWrite Off    不写入深度缓冲</span><br><span class="line">不设置的话，默认为写入</span><br><span class="line"></span><br><span class="line">一般情况下，我们在做透明等特殊效果时，会设置为不写入</span><br></pre></td></tr></table></figure> ##
+深度测试 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">主要作用：</span><br><span class="line">设置深度测试的对比方式</span><br><span class="line"></span><br><span class="line">深度测试的主要目的是确保在渲染时，像素按照正确的深度（距离相机的距离）顺序进行绘制，</span><br><span class="line">从而创建正确的遮挡关系和透视效果</span><br><span class="line">在渲染场景之前，深度缓冲被初始化为最大深度值，表示所有像素都在相机之外。</span><br><span class="line">在渲染过程中，对于每个像素，深度测试会将当前像素的深度值与深度缓冲中对应位置的值进行比较。</span><br><span class="line">一般情况下</span><br><span class="line"><span class="number">1.</span>如果当前像素的深度值小于深度缓冲中的值，说明当前像素在其他物体之前，它会被绘制，并更新深度缓冲。</span><br><span class="line"><span class="number">2.</span>如果当前像素的深度值大于等于深度缓冲中的值，说明当前像素在其他物体之后，它会被丢弃，不会被绘制，并保持深度缓冲不变。</span><br><span class="line"></span><br><span class="line">ZTest Less        </span><br><span class="line">小于当前深度缓冲中的值，就通过测试，写入到深度缓冲中</span><br><span class="line">ZTest Greater </span><br><span class="line">大于当前深度缓冲中的值，就通过测试，写入到深度缓冲中</span><br><span class="line">ZTest LEqual </span><br><span class="line">小于等于当前深度缓冲中的值，就通过测试，写入到深度缓冲中</span><br><span class="line">ZTest GEqual </span><br><span class="line">大于等于当前深度缓冲中的值，就通过测试，写入到深度缓冲中</span><br><span class="line">ZTest Equal </span><br><span class="line">等于当前深度缓冲中的值，就通过测试，写入到深度缓冲中</span><br><span class="line">ZTest NotEqual </span><br><span class="line">不等于当前深度缓冲中的值，就通过测试，写入到深度缓冲中</span><br><span class="line">ZTest Always </span><br><span class="line">始终通过深度测试写入深度缓冲中</span><br><span class="line">不设置的话，默认为LEqual 小于等于</span><br><span class="line"></span><br><span class="line">一般情况下，我们只有在实现一些特殊效果时才会区修改深度测试方式，比如透明物体渲染会修改为Less，描边效果会修改为Greater等</span><br></pre></td></tr></table></figure></p>
+<h2 id="混合方式">混合方式</h2>
+<p>在深度测试之后进行</p>
+<p>![[混合流程图.png]] <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">主要作用：</span><br><span class="line">设置渲染图像的混合方式（多种颜色叠加混合，比如透明、半透明效果和遮挡的物体进行颜色混合）</span><br><span class="line"></span><br><span class="line">Blend One One 线性减淡</span><br><span class="line">Blend SrcAlpha OneMinusSrcAlpha 正常透明混合</span><br><span class="line">Blend OneMinusDstColor One 滤色</span><br><span class="line">Blend DstColor Zero 正片叠底</span><br><span class="line">Blend DstColor SrcColor X光片效果</span><br><span class="line">Blend One OneMinusSrcAlpha 透明度混合</span><br><span class="line">等等</span><br><span class="line">不设置的话，默认不会进行混合</span><br><span class="line">一般情况下，我们需要多种颜色叠加渲染时，就需要设置混合方式，具体情况具体处理</span><br></pre></td></tr></table></figure></p>
+<h2 id="其他渲染状态">其他渲染状态</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.L</span>OD         控制LOD级别，在不同距离下使用不同的渲染方式处理</span><br><span class="line"><span class="number">2.</span>ColorMask   设置颜色通道的写入蒙版，默认蒙版为RGBA</span><br><span class="line">等等</span><br><span class="line"></span><br><span class="line">我们目前主要掌握剔除方式、深度缓冲、深度测试、混合方式即可</span><br></pre></td></tr></table></figure>
+<h2 id="渲染状态的注意事项">渲染状态的注意事项</h2>
+<blockquote>
+<p>[!NOTE]
+&gt;以上这些状态不仅可以在SubShader语句块中声明之后讲解的Pass渲染通道语句块中也可以声明这些渲染状态，如果在SubShader语句块中使用会影响之后的所有渲染通道Pass，如果在Pass语句块中使用只会影响当前Pass渲染通道，不会影响其他的Pass</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">渲染状态对于我们来说很重要</span><br><span class="line">它可以影响最终我们看到的渲染效果</span><br><span class="line">其中</span><br><span class="line">剔除方式决定了 模型正面背面是否能够被渲染</span><br><span class="line">深度缓冲和深度测试 决定了景深关系的确定以及透明效果的正确表达等</span><br><span class="line">混合方式 决定了透明半透明颜色的正确表现，以及一些特殊颜色效果的表现</span><br><span class="line"></span><br><span class="line">这些内容，大家可以将其记入自己的笔记当中</span><br><span class="line">之后在使用他们时，翻看笔记进行复习</span><br></pre></td></tr></table></figure>
+<h1 id="渲染通道">渲染通道</h1>
+<h2 id="渲染通道的语法结构">渲染通道的语法结构</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Pass&#123;</span><br><span class="line">    <span class="number">1.</span>Name 名称</span><br><span class="line">  <span class="number">2.</span>渲染标签</span><br><span class="line">  <span class="number">3.</span>渲染状态</span><br><span class="line">  <span class="number">4.</span>其他着色器代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="渲染通道的名字">渲染通道的名字</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">主要作用：</span><br><span class="line">我们对Pass命名的主要目的</span><br><span class="line">可以利用UsePass命令在其他Shader当中复用该Pass的代码,</span><br><span class="line">只需要在其他Shader当中使用</span><br><span class="line">UsePass <span class="string">&quot;Shader路径/Pass名&quot;</span></span><br><span class="line">注意：</span><br><span class="line">Unity内部会把Pass名称转换为大写字母</span><br><span class="line">因此在使用UsePass命令时必须使用大写形式的名字</span><br><span class="line"></span><br><span class="line">Pass&#123;</span><br><span class="line">    Name MyPass</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">在其他Shader中复用该Pass代码时</span><br><span class="line">UsePass <span class="string">&quot;TeachShader/Lesson4/MYPASS&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="渲染通道中的渲染标签">渲染通道中的渲染标签</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Pass中的渲染标签语法和SubShader中相同</span><br><span class="line">Tags&#123; <span class="string">&quot;标签名1&quot;</span> = <span class="string">&quot;标签值1&quot;</span> <span class="string">&quot;标签名2&quot;</span> = <span class="string">&quot;标签值2&quot;</span> <span class="string">&quot;标签名2&quot;</span> = <span class="string">&quot;标签值2&quot;</span>.......&#125;</span><br><span class="line">但是我们之前讲解过的SubShader语句块中的渲染标签不能够在Pass中使用</span><br><span class="line">Pass当中有自己专门的渲染标签</span><br></pre></td></tr></table></figure>
+<h3 id="tags-lightmode-标签值">1.Tags{ “LightMode” = “标签值” }</h3>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">主要作用：</span><br><span class="line">        指定了该Pass应该在哪个阶段执行</span><br><span class="line">        可以将着色器代码分配给适当的渲染阶段，以实现所需的效果</span><br><span class="line"></span><br><span class="line">        <span class="number">1</span> - <span class="number">1.</span>Always</span><br><span class="line">            始终渲染；不应用光照</span><br><span class="line">        <span class="number">1</span> - <span class="number">2.F</span>orwardBase</span><br><span class="line">            在前向渲染中使用；应用环境光、主方向光、顶点 / SH 光源和光照贴图</span><br><span class="line">        <span class="number">1</span> - <span class="number">3.F</span>orwardAdd</span><br><span class="line">            在前向渲染中使用；应用附加的每像素光源（每个光源有一个通道）</span><br><span class="line">        <span class="number">1</span> - <span class="number">4.</span>Deferred</span><br><span class="line">            在延迟渲染中使用；渲染 G 缓冲区</span><br><span class="line">        <span class="number">1</span> - <span class="number">5.</span>ShadowCaster</span><br><span class="line">            将对象深度渲染到阴影贴图或深度纹理中</span><br><span class="line">        <span class="number">1</span> - <span class="number">6.</span>MotionVectors</span><br><span class="line">            用于计算每对象运动矢量</span><br><span class="line">        <span class="number">1</span> - <span class="number">7.</span>PrepassBase</span><br><span class="line">            在旧版延迟光照中使用；渲染法线和镜面反射指数</span><br><span class="line">        <span class="number">1</span> - <span class="number">8.</span>PrepassFinal</span><br><span class="line">            在旧版延迟光照中使用；通过组合纹理、光照和反光来渲染最终颜色</span><br><span class="line">        <span class="number">1</span> - <span class="number">9.</span>Vertex</span><br><span class="line">            当对象不进行光照贴图时在旧版顶点光照渲染中使用；应用所有顶点光源</span><br><span class="line">        <span class="number">1</span> - <span class="number">10.</span>VertexLMRGBM</span><br><span class="line">            当对象不进行光照贴图时在旧版顶点光照渲染中使用；在光照贴图为 RGBM 编码的平台上（PC 和游戏主机）</span><br><span class="line">        <span class="number">1</span> - <span class="number">11.</span>VertexLM</span><br><span class="line">            当对象不进行光照贴图时在旧版顶点光照渲染中使用；在光照贴图为双 LDR 编码的平台上（移动平台）</span><br><span class="line"></span><br><span class="line">        关于向前渲染、延迟渲染、旧版光照等概念了解</span><br><span class="line">        https:<span class="comment">//docs.unity.cn/cn/2019.4/Manual/RenderingPaths.html</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="tags-requireoptions-标签值">2.Tags{ “RequireOptions” = “标签值”
+}</h3>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">主要作用：</span><br><span class="line">用于指定当满足某些条件时才渲染该Pass</span><br><span class="line"></span><br><span class="line">目前Unity仅支持</span><br><span class="line">Tags&#123; <span class="string">&quot;RequireOptions&quot;</span> = <span class="string">&quot;SoftVegetation&quot;</span> &#125;</span><br><span class="line">仅当Quality窗口中开启了SoftVegetation时才渲染此通道</span><br></pre></td></tr></table></figure>
+<h3 id="tags-passflags-标签值">3.Tags{ “PassFlags” = “标签值” }</h3>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">主要作用：</span><br><span class="line">一个渲染通道Pass可指示一些标志来更改渲染管线向Pass传递数据的方式</span><br><span class="line"></span><br><span class="line">目前Unity仅支持</span><br><span class="line">Tags&#123; <span class="string">&quot;PassFlags&quot;</span> = <span class="string">&quot;OnlyDirectional&quot;</span> &#125;</span><br><span class="line">在 ForwardBase 向前渲染的通道类型中使用时，此标志的作用是仅允许主方向光和环境光 / 光照探针数据传递到着色器</span><br><span class="line">这意味着非重要光源的数据将不会传递到顶点光源或球谐函数着色器变量</span><br></pre></td></tr></table></figure>
+<h2 id="pass中的渲染状态">Pass中的渲染状态</h2>
+<pre><code>    我们上节课在SubShader语句块中学习的渲染状态同样适用于Pass
+    比如
+    剔除方式决定了 模型正面背面是否能够被渲染
+    深度缓冲和深度测试 决定了景深关系的确定以及透明效果的正确表达等
+    混合方式 决定了透明半透明颜色的正确表现，以及一些特殊颜色效果的表现
+    这些渲染状态都可以在单个Pass中进行设置
+    需要注意的是
+    如果在SubShader语句块中使用会影响之后的所有渲染通道Pass
+    如果在Pass语句块中使用只会影响当前Pass渲染通道，不会影响其他的Pass
+
+    不仅如此，Pass中还可以使用固定管线着色器的命令</code></pre>
+<h2 id="其他着色器代码">其他着色器代码</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">其他代码部分就是实现着色器的核心代码部分</span><br><span class="line">我们可能会用到CG或HLSL等着色器语言来进行逻辑书写</span><br><span class="line">我们之后会详细讲解</span><br></pre></td></tr></table></figure>
+<h2 id="grabpass命令">GrabPass命令</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">我们可以利用GrabPass命令把即将绘制对象时的屏幕内容抓取到纹理中</span><br><span class="line">在后续通道中即可使用此纹理，从而执行基于图像的高级效果。</span><br><span class="line"></span><br><span class="line">举例：</span><br><span class="line">将绘制该对象之前的屏幕抓取到 _BackgroundTexture 中</span><br><span class="line">GrabPass</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;_BackgroundTexture&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">注意：</span><br><span class="line">该命令一般写在某个Pass前，在之后的Pass代码中可以利用_BackgroundTexture变量进行处理</span><br></pre></td></tr></table></figure>
+<h2 id="总结-1">总结</h2>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Pass渲染通道语句块中</span><br><span class="line">主要包含了</span><br><span class="line"><span class="number">1.</span>名字：可以帮助我们复用Pass代码</span><br><span class="line"><span class="number">2.</span>渲染标签：不能使用SubShader中的渲染标签，有自己独有的渲染标签</span><br><span class="line"><span class="number">3.</span>渲染状态：SubShader当中的渲染状态同样可以在Pass中使用，影响的区域不同</span><br><span class="line"><span class="number">4.</span>着色器语言逻辑：我们之后会详细学习的部分</span><br><span class="line">四个部分</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/11/17/test-my-site/" rel="prev" title="test_my_site">
+      <i class="fa fa-chevron-left"></i> test_my_site
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/gaoxiaoyi7343.cn/Hello%20World" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E6%A0%87%E7%AD%BE"><span class="nav-number">1.</span> <span class="nav-text">渲染标签</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">语法结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%81%E7%94%A8%E6%89%B9%E5%A4%84%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">禁用批处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%81%E7%94%A8%E9%98%B4%E5%BD%B1%E6%8A%95%E5%BD%B1"><span class="nav-number">1.3.</span> <span class="nav-text">禁用阴影投影</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%BD%E7%95%A5%E6%8A%95%E5%BD%B1%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">忽略投影机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%A0%87%E7%AD%BE"><span class="nav-number">1.5.</span> <span class="nav-text">其他标签</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81"><span class="nav-number">2.</span> <span class="nav-text">渲染状态</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84-1"><span class="nav-number">2.1.</span> <span class="nav-text">语法结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%94%E9%99%A4%E6%96%B9%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">剔除方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E7%BC%93%E5%AD%98"><span class="nav-number">2.3.</span> <span class="nav-text">深度缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E6%96%B9%E5%BC%8F"><span class="nav-number">2.4.</span> <span class="nav-text">混合方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81"><span class="nav-number">2.5.</span> <span class="nav-text">其他渲染状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.6.</span> <span class="nav-text">渲染状态的注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E9%80%9A%E9%81%93"><span class="nav-number">3.</span> <span class="nav-text">渲染通道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E9%80%9A%E9%81%93%E7%9A%84%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">渲染通道的语法结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E9%80%9A%E9%81%93%E7%9A%84%E5%90%8D%E5%AD%97"><span class="nav-number">3.2.</span> <span class="nav-text">渲染通道的名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E9%80%9A%E9%81%93%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E6%A0%87%E7%AD%BE"><span class="nav-number">3.3.</span> <span class="nav-text">渲染通道中的渲染标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tags-lightmode-%E6%A0%87%E7%AD%BE%E5%80%BC"><span class="nav-number">3.3.1.</span> <span class="nav-text">1.Tags{ “LightMode” &#x3D; “标签值” }</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tags-requireoptions-%E6%A0%87%E7%AD%BE%E5%80%BC"><span class="nav-number">3.3.2.</span> <span class="nav-text">2.Tags{ “RequireOptions” &#x3D; “标签值”
+}</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tags-passflags-%E6%A0%87%E7%AD%BE%E5%80%BC"><span class="nav-number">3.3.3.</span> <span class="nav-text">3.Tags{ “PassFlags” &#x3D; “标签值” }</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81"><span class="nav-number">3.4.</span> <span class="nav-text">Pass中的渲染状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%9D%80%E8%89%B2%E5%99%A8%E4%BB%A3%E7%A0%81"><span class="nav-number">3.5.</span> <span class="nav-text">其他着色器代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grabpass%E5%91%BD%E4%BB%A4"><span class="nav-number">3.6.</span> <span class="nav-text">GrabPass命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-number">3.7.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="桂花糕"
+      src="/uploads/%E5%8D%83%E6%9D%9F.jpg">
+  <p class="site-author-name" itemprop="name">桂花糕</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">桂花糕</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
